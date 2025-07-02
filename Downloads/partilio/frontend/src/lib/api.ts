@@ -43,6 +43,7 @@ const api = axios.create({
     envBaseURL && envBaseURL.startsWith('/')
       ? envBaseURL
       : '/api',
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || '/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
