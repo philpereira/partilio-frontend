@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+
   // The API is accessed via the "/api" proxy defined in `rewrites`
+
   compress: true,
   poweredByHeader: false,
   images: {
