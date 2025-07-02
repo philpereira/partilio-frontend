@@ -31,7 +31,7 @@ npm start
 ## 🌐 URLs
 
 - **Local:** http://localhost:3000
-- **API:** https://partilio-backend.onrender.com
+- **API Proxy:** `/api` (rewritten to [backend](https://partilio-backend.onrender.com))
 
 ## 📱 Funcionalidades
 
@@ -54,3 +54,35 @@ src/
 ├── types/         # TypeScript Types
 └── schemas/       # Zod Schemas
 ```
+
+## 🛡️ Configuração de CORS no Backend
+
+Para evitar erros de CORS em produção, o backend precisa responder às requisições `OPTIONS` com os cabeçalhos apropriados. Um exemplo usando **Express**:
+
+```ts
+import cors from 'cors';
+import express from 'express';
+
+const app = express();
+
+const allowedOrigins = [
+  'https://partilio-frontend.onrender.com',
+  'http://localhost:3000',
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 204,
+  })
+);
+
+app.options('*', cors());
+
+// rotas da API abaixo...
+```
+
+A configuração também pode ser adaptada para **NestJS** ou **Fastify** seguindo a mesma ideia. Certifique-se de definir a variável `CORS_ORIGIN` na Render para incluir a URL do frontend e `http://localhost:3000` quando for necessário.

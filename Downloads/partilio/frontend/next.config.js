@@ -8,41 +8,34 @@ const nextConfig = {
   images: {
     domains: ['partilio-backend.onrender.com'],
   },
-  // Disable TypeScript checking during build (opcional)
   typescript: {
     ignoreBuildErrors: true,
   },
   eslint: {
     ignoreDuringBuilds: true,
   },
-  
-  // IMPORTANTE: Remover 'output: export' para permitir SSR
-  // Comentado: output: 'export',
-  // Comentado: trailingSlash: true,
-  
-  // Permitir funcionalidades do Next.js
   experimental: {
     appDir: true,
   },
-  
-  // Configuração para Render.com
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
         ],
       },
     ];
   },
-}
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://partilio-backend.onrender.com/api/:path*',
+      },
+    ];
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
