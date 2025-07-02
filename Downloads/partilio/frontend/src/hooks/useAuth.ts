@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { authService } from '@/services/auth.service';
-import { useAppStore } from '@/store';
-import type { LoginCredentials, RegisterData } from '@/types/auth';
+import { authService } from '../services/auth.service';  // ← MUDANÇA: @/services → ../services
+import { useAppStore } from '../store';  // ← MUDANÇA: @/store → ../store
+import type { LoginCredentials, RegisterData } from '../types/auth';  // ← MUDANÇA: @/types → ../types
 import { toast } from 'sonner';
 
 export function useAuth() {

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import type { User, Payer, Category, CreditCard } from '@/types';
+import type { User, Payer, Category, CreditCard } from '../types';  // ← MUDANÇA: @/types → ../types
 
 interface AuthState {
   user: User | null;
