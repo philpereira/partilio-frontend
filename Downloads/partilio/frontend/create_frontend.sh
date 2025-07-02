@@ -123,9 +123,6 @@ EOF
 cat > next.config.js << 'EOF'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-  },
   compress: true,
   poweredByHeader: false,
   images: {
@@ -217,7 +214,6 @@ EOF
 # .env.local
 cat > .env.local << 'EOF'
 # API Configuration
-NEXT_PUBLIC_API_URL=https://partilio-backend.onrender.com
 NEXT_PUBLIC_API_BASE_URL=https://partilio-backend.onrender.com/api
 
 # Environment
@@ -230,7 +226,6 @@ EOF
 # .env.example
 cat > .env.example << 'EOF'
 # API Configuration
-NEXT_PUBLIC_API_URL=https://partilio-backend.onrender.com
 NEXT_PUBLIC_API_BASE_URL=https://partilio-backend.onrender.com/api
 
 # Environment

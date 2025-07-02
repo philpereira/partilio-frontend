@@ -28,6 +28,14 @@ npm run build
 npm start
 ```
 
+## 🔑 Variáveis de Ambiente
+
+Crie um arquivo `.env.local` com base em `.env.example` para configurar a aplicação.
+
+- `NEXT_PUBLIC_API_BASE_URL` - Base das requisições para a API (padrão `/api`)
+- `NODE_ENV` - Define o ambiente (por padrão `production`)
+- `NEXT_PUBLIC_ENABLE_DEVTOOLS` - Ativa o React Query Devtools no cliente
+
 ## 🌐 URLs
 
 - **Local:** http://localhost:3000
