@@ -94,3 +94,7 @@ app.options('*', cors());
 ```
 
 A configuração também pode ser adaptada para **NestJS** ou **Fastify** seguindo a mesma ideia. Certifique-se de definir a variável `CORS_ORIGIN` na Render para incluir a URL do frontend e `http://localhost:3000` quando for necessário.
+
+## ✔️ Qualidade de Código
+
+Execute `npm run lint` para verificar problemas de estilo e garantir que nenhuma parte do código contenha a URL fixa `https://partilio-backend.onrender.com`. O comando falhará se encontrar essa string.
