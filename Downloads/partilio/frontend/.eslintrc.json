@@ -1,3 +1,12 @@
 {
-  "extends": "next"
+  "extends": "next",
+  "rules": {
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "Literal[value='https://partilio-backend.onrender.com']",
+        "message": "Hardcoded backend URL is not allowed; use environment variables instead."
+      }
+    ]
+  }
 }
