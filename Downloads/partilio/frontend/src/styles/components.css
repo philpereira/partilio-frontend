@@ -1,0 +1,25 @@
+/* Component-specific styles */
+
+.expense-card {
+  @apply card hover:shadow-md transition-shadow cursor-pointer;
+}
+
+.onboarding-step {
+  @apply min-h-screen flex flex-col justify-center items-center p-6;
+}
+
+.dashboard-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+.form-wizard {
+  @apply max-w-2xl mx-auto;
+}
+
+.progress-bar {
+  @apply w-full bg-gray-200 rounded-full h-2;
+}
+
+.progress-fill {
+  @apply bg-primary-600 h-2 rounded-full transition-all duration-300;
+}
