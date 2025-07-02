@@ -37,5 +37,9 @@
     "eslint-config-next": "^14.2.30",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.39"
+  },
+
+  "engines": {
+    "node": "20.x"
   }
 }
