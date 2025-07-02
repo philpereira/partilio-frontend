@@ -8,24 +8,19 @@ const nextConfig = {
   images: {
     domains: ['partilio-backend.onrender.com'],
   },
-  // Disable ALL TypeScript checking
+  // Disable TypeScript checking
   typescript: {
     ignoreBuildErrors: true,
   },
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Remove experimental features
-  experimental: {},
-  // Force treat as JavaScript
-  swcMinify: true,
-  // Override webpack to ignore TS checking
-  webpack: (config, options) => {
-    // Force JavaScript mode
-    config.resolve.alias = {
-      ...config.resolve.alias,
-    };
-    return config;
+  // Force client-side rendering
+  output: 'export',
+  trailingSlash: true,
+  // Disable static generation for pages with localStorage
+  experimental: {
+    appDir: true,
   },
 }
 
