@@ -8,19 +8,40 @@ const nextConfig = {
   images: {
     domains: ['partilio-backend.onrender.com'],
   },
-  // Disable TypeScript checking
+  // Disable TypeScript checking during build (opcional)
   typescript: {
     ignoreBuildErrors: true,
   },
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Force client-side rendering
-  output: 'export',
-  trailingSlash: true,
-  // Disable static generation for pages with localStorage
+  
+  // IMPORTANTE: Remover 'output: export' para permitir SSR
+  // Comentado: output: 'export',
+  // Comentado: trailingSlash: true,
+  
+  // Permitir funcionalidades do Next.js
   experimental: {
     appDir: true,
+  },
+  
+  // Configuração para Render.com
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+        ],
+      },
+    ];
   },
 }
 

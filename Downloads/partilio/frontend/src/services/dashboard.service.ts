@@ -1,6 +1,7 @@
-import api from '@/lib/api';
-import type { DashboardData } from '@/types/dashboard';
-import type { APIResponse } from '@/types';
+// src/services/dashboard.service.ts
+import api from '../lib/api'; // Corrigir import
+import type { DashboardData } from '../types/dashboard'; // Corrigir import
+import type { APIResponse } from '../types'; // Corrigir import
 
 export const dashboardService = {
   async getDashboardData(period?: { month: number; year: number }): Promise<DashboardData> {

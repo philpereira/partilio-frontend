@@ -1,22 +1,22 @@
 'use client';
 
-import { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth'; // ← MUDANÇA
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../hooks/useAuth';
 import { useRouter } from 'next/navigation';
-import { Button } from '../../components/ui/button'; // ← MUDANÇA
-import { useEffect } from 'react';
+import { Button } from '../../components/ui/button';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, isLoading, isAuthenticated } = useAuth();
+  const { login, isLoading, isAuthenticated, isInitialized } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    // Só executa redirecionamento após inicialização no cliente
+    if (isInitialized && isAuthenticated) {
       router.push('/');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, router, isInitialized]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +27,18 @@ export default function LoginPage() {
       // Error é tratado no hook useAuth
     }
   };
+
+  // Mostra loading enquanto não inicializar no cliente
+  if (!isInitialized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="loading-spinner w-8 h-8 mx-auto mb-4"></div>
+          <p>Carregando...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">

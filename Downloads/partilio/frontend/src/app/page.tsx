@@ -1,28 +1,44 @@
 'use client';
 
-import { useAuth } from '../hooks/useAuth'; // ← MUDANÇA
+import { useAuth } from '../hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { Button } from '../components/ui/button'; // ← MUDANÇA
+import { Button } from '../components/ui/button';
 
 export default function HomePage() {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user, logout, isInitialized } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
+    // Só executa redirecionamentos após a inicialização no cliente
+    if (!isInitialized) return;
+
     if (!isAuthenticated) {
       router.push('/login');
     } else if (user && !user.onboardingCompleted) {
       router.push('/onboarding');
     }
-  }, [isAuthenticated, user, router]);
+  }, [isAuthenticated, user, router, isInitialized]);
 
-  if (!isAuthenticated || !user) {
+  // Mostra loading enquanto não inicializar no cliente
+  if (!isInitialized) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="loading-spinner w-8 h-8 mx-auto mb-4"></div>
           <p>Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Mostra loading enquanto verifica autenticação
+  if (!isAuthenticated || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="loading-spinner w-8 h-8 mx-auto mb-4"></div>
+          <p>Verificando autenticação...</p>
         </div>
       </div>
     );
