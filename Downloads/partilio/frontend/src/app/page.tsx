@@ -1,9 +1,9 @@
 'use client';
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '../hooks/useAuth'; // ← MUDANÇA
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '../components/ui/button'; // ← MUDANÇA
 
 export default function HomePage() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -38,7 +38,7 @@ export default function HomePage() {
             </h1>
             <div className="flex items-center space-x-4">
               <span className="text-gray-600">Olá, {user.name}</span>
-              <Button variant="ghost" onClick={logout}>
+              <Button variant="ghost" onClick={() => logout()}>
                 Sair
               </Button>
             </div>
