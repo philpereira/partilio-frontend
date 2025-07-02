@@ -31,7 +31,7 @@ npm start
 ## 🌐 URLs
 
 - **Local:** http://localhost:3000
-- **API:** https://partilio-backend.onrender.com
+- **API Proxy:** `/api` (rewritten to [backend](https://partilio-backend.onrender.com))
 
 ## 📱 Funcionalidades
 

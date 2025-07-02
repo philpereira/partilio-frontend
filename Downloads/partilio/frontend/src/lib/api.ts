@@ -33,8 +33,16 @@ const removeFromStorage = (key: string): void => {
   }
 };
 
+const envBaseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001/api',
+  // Default to the local proxy when the environment variable contains
+  // an absolute URL. This avoids CORS issues in production if the
+  // deployment forgets to override the variable.
+  baseURL:
+    envBaseURL && envBaseURL.startsWith('/')
+      ? envBaseURL
+      : '/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
