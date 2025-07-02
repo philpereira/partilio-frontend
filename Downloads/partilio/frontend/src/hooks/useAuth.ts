@@ -1,4 +1,3 @@
-// src/hooks/useAuth.ts
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { authService } from '../services/auth.service';
 import { useAppStore } from '../store';
@@ -53,40 +52,68 @@ export function useAuth() {
   const loginMutation = useMutation({
     mutationFn: authService.login,
     onSuccess: (data) => {
-      const { user, tokens } = data;
+      console.log('🔍 Login Success Data:', data); // Debug
+      
+      // 🔧 CORREÇÃO: Adaptar para estrutura real do backend
+      const { user, token, tokens } = data;
+      
+      // Backend pode retornar 'token' OU 'tokens.accessToken'
+      const accessToken = token || tokens?.accessToken;
+      const refreshToken = tokens?.refreshToken || token; // Fallback
+      
+      if (!accessToken) {
+        console.error('❌ Token não encontrado na resposta:', data);
+        toast.error('Erro interno: token não recebido');
+        return;
+      }
       
       // Salvar tokens no localStorage
-      setToStorage('partilio_token', tokens.accessToken);
-      setToStorage('partilio_refresh_token', tokens.refreshToken);
+      setToStorage('partilio_token', accessToken);
+      if (refreshToken && refreshToken !== accessToken) {
+        setToStorage('partilio_refresh_token', refreshToken);
+      }
       
       setAuth({
         user,
-        token: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
+        token: accessToken,
+        refreshToken: refreshToken || accessToken,
       });
       
       toast.success('Login realizado com sucesso!');
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Erro ao fazer login');
+      console.error('❌ Login Error:', error); // Debug
+      
+      const errorMessage = error.response?.data?.message || 
+                          error.message || 
+                          'Erro ao fazer login';
+      
+      toast.error(errorMessage);
     },
   });
 
   const registerMutation = useMutation({
     mutationFn: authService.register,
     onSuccess: (data) => {
-      const { user, tokens } = data;
+      // Mesmo tratamento do login
+      const { user, token, tokens } = data;
+      const accessToken = token || tokens?.accessToken;
+      const refreshToken = tokens?.refreshToken || token;
       
-      setToStorage('partilio_token', tokens.accessToken);
-      setToStorage('partilio_refresh_token', tokens.refreshToken);
-      
-      setAuth({
-        user,
-        token: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-      });
-      
-      toast.success('Conta criada com sucesso!');
+      if (accessToken) {
+        setToStorage('partilio_token', accessToken);
+        if (refreshToken && refreshToken !== accessToken) {
+          setToStorage('partilio_refresh_token', refreshToken);
+        }
+        
+        setAuth({
+          user,
+          token: accessToken,
+          refreshToken: refreshToken || accessToken,
+        });
+        
+        toast.success('Conta criada com sucesso!');
+      }
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || 'Erro ao criar conta');
@@ -121,8 +148,8 @@ export function useAuth() {
       const token = getFromStorage('partilio_token');
       const refreshToken = getFromStorage('partilio_refresh_token');
       
-      if (token && refreshToken) {
-        setAuth({ user, token, refreshToken });
+      if (token) {
+        setAuth({ user, token, refreshToken: refreshToken || token });
       }
     },
     onError: () => {
@@ -135,7 +162,7 @@ export function useAuth() {
     user: auth?.user || null,
     isAuthenticated: !!auth,
     isLoading: loginMutation.isPending || registerMutation.isPending || isLoadingUser,
-    isInitialized, // Novo campo para indicar se já inicializou no cliente
+    isInitialized,
     login: loginMutation.mutateAsync,
     register: registerMutation.mutateAsync,
     logout: logoutMutation.mutate,
