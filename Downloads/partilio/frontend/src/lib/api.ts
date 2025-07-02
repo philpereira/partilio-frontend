@@ -1,4 +1,3 @@
-// src/lib/api.ts
 import axios from 'axios';
 
 // Função helper para verificar se estamos no lado do cliente
@@ -33,17 +32,8 @@ const removeFromStorage = (key: string): void => {
   }
 };
 
-const envBaseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
+// 🔧 CORREÇÃO: Usar sempre o proxy local
 const api = axios.create({
-  // Default to the local proxy when the environment variable contains
-  // an absolute URL. This avoids CORS issues in production if the
-  // deployment forgets to override the variable.
-  baseURL:
-    envBaseURL && envBaseURL.startsWith('/')
-      ? envBaseURL
-      : '/api',
-
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || '/api',
   timeout: 10000,
   headers: {
