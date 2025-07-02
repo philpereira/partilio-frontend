@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-  },
+  // The API is accessed via the "/api" proxy defined in `rewrites`
   compress: true,
   poweredByHeader: false,
   images: {
