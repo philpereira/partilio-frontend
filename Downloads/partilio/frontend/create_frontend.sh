@@ -123,6 +123,9 @@ EOF
 cat > next.config.js << 'EOF'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+
+  // The API is accessed via the "/api" proxy defined in `rewrites`
+
   compress: true,
   poweredByHeader: false,
   images: {
@@ -214,7 +217,10 @@ EOF
 # .env.local
 cat > .env.local << 'EOF'
 # API Configuration
+
 NEXT_PUBLIC_API_BASE_URL=https://partilio-backend.onrender.com/api
+# NEXT_PUBLIC_API_URL is deprecated; use the local "/api" proxy instead
+NEXT_PUBLIC_API_BASE_URL=/api
 
 # Environment
 NODE_ENV=development
@@ -226,7 +232,12 @@ EOF
 # .env.example
 cat > .env.example << 'EOF'
 # API Configuration
+
 NEXT_PUBLIC_API_BASE_URL=https://partilio-backend.onrender.com/api
+
+# NEXT_PUBLIC_API_URL is deprecated; use the local "/api" proxy instead
+NEXT_PUBLIC_API_BASE_URL=/api
+
 
 # Environment
 NODE_ENV=production

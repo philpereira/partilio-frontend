@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+
+  // The API is accessed via the "/api" proxy defined in `rewrites`
+
   compress: true,
   poweredByHeader: false,
   images: {
@@ -29,7 +32,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://partilio-backend.onrender.com/api/:path*',
+        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`,
       },
     ];
   },
