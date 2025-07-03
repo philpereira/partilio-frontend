@@ -1,4 +1,4 @@
-import { RegisterFormData, RegisterFormErrors } from '@/types/auth';
+import { RegisterFormData, RegisterFormErrors } from '../../../types/auth';  // ← MUDANÇA: @/types → ../../../types
 
 export const validateRegisterForm = (data: RegisterFormData): RegisterFormErrors => {
   const errors: RegisterFormErrors = {};

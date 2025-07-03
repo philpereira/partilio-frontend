@@ -3,21 +3,21 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAuthStore } from '@/stores/authStore';
+import { useAppStore } from '../../store';  // ← MUDANÇA: @/stores/authStore → ../../store
 import { RegisterForm } from './components/RegisterForm';
 import { Loader2, ArrowLeft, Shield, Users, ChartBar } from 'lucide-react';
 
 const RegisterPage = () => {
   const router = useRouter();
-  const { user, isLoading } = useAuthStore();
+  const { auth } = useAppStore();  // ← MUDANÇA: usar auth do store geral
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    if (user && !isLoading) {
+    if (auth?.user) {
       router.push('/dashboard');
     }
-  }, [user, isLoading, router]);
+  }, [auth, router]);
 
   if (!mounted) {
     return (
@@ -27,7 +27,7 @@ const RegisterPage = () => {
     );
   }
 
-  if (user) return null;
+  if (auth?.user) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">

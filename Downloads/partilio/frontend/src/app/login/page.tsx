@@ -2,6 +2,7 @@
 
 'use client';
 
+import Link from 'next/link';  // ← ADICIONAR esta linha no topo
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useRouter } from 'next/navigation';
@@ -215,20 +216,18 @@ export default function LoginPage() {
               </p>
             </div>
 
-            {/* Link para registro */}
+          {/* Link para registro */}
             <div className="text-center">
               <p className="text-sm text-gray-600">
                 Não tem uma conta?{' '}
-                <button
-                  type="button"
+                <Link
+                  href="/register"
                   className="font-medium text-blue-600 hover:text-blue-800"
                 >
                   Criar conta gratuita
-                </button>
+                </Link>
               </p>
             </div>
-          </div>
-        </div>
 
         {/* Lado direito - Hero/Features */}
         <div className="hidden lg:flex lg:flex-1 bg-gradient-to-br from-blue-600 to-purple-700 text-white">
@@ -298,17 +297,4 @@ export default function LoginPage() {
       </div>
     </div>
   );
-
-// 🆕 ADICIONAR ESTE BLOCO no final do formulário de login
-<div className="mt-8 text-center">
-  <p className="text-gray-600">
-    Não tem uma conta?{' '}
-    <Link 
-      href="/register" 
-      className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
-    >
-      Criar conta grátis
-    </Link>
-  </p>
-</div>
 }

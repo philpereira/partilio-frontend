@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/stores/authStore';
-import { authService } from '@/services/auth.service';
+import { useAppStore } from '../../../store';  // ← MUDANÇA: @/stores/authStore → ../../../store
+import { authService } from '../../../services/auth.service';  // ← MUDANÇA: @/services → ../../../services
 import { validateRegisterForm } from './FormValidation';
-import { RegisterFormData, RegisterFormErrors } from '@/types/auth';
+import { RegisterFormData, RegisterFormErrors } from '../../../types/auth';  // ← MUDANÇA: @/types → ../../../types
 import { 
   Eye, 
   EyeOff, 
@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 
 export const RegisterForm = () => {
   const router = useRouter();
-  const { setAuth } = useAuthStore();
+  const { setAuth } = useAppStore();
   
   const [formData, setFormData] = useState<RegisterFormData>({
     name: '',
@@ -86,7 +86,7 @@ export const RegisterForm = () => {
 
       toast.success('Conta criada com sucesso!');
 
-      // 🔧 USAR A ESTRUTURA ATUAL do useAuthStore
+      // 🔧 ADAPTAR para estrutura atual do store (auth em vez de user/token separados)
       setAuth({
         user: registerResponse.user,
         token: registerResponse.tokens.accessToken,
