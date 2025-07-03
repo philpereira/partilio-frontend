@@ -298,4 +298,17 @@ export default function LoginPage() {
       </div>
     </div>
   );
+
+// 🆕 ADICIONAR ESTE BLOCO no final do formulário de login
+<div className="mt-8 text-center">
+  <p className="text-gray-600">
+    Não tem uma conta?{' '}
+    <Link 
+      href="/register" 
+      className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+    >
+      Criar conta grátis
+    </Link>
+  </p>
+</div>
 }
