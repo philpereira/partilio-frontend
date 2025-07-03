@@ -5,35 +5,34 @@ import type { LoginCredentials, RegisterData } from '../types/auth';
 import { toast } from 'sonner';
 import { useEffect, useState } from 'react';
 
-// Função helper para verificar se estamos no lado do cliente
-const isClient = typeof window !== 'undefined';
+// 🔧 CORREÇÃO SSR: Funções helper para localStorage seguro
+const isClientSide = () => typeof window !== 'undefined';
 
-// Função helper para acessar localStorage de forma segura
-const getFromStorage = (key: string): string | null => {
-  if (!isClient) return null;
+const safeGetItem = (key: string): string | null => {
+  if (!isClientSide()) return null;
   try {
-    return localStorage.getItem(key);
+    return window.localStorage.getItem(key);
   } catch (error) {
-    console.warn(`Erro ao acessar localStorage para key "${key}":`, error);
+    console.warn(`Erro ao acessar localStorage para "${key}":`, error);
     return null;
   }
 };
 
-const setToStorage = (key: string, value: string): void => {
-  if (!isClient) return;
+const safeSetItem = (key: string, value: string): void => {
+  if (!isClientSide()) return;
   try {
-    localStorage.setItem(key, value);
+    window.localStorage.setItem(key, value);
   } catch (error) {
-    console.warn(`Erro ao salvar no localStorage para key "${key}":`, error);
+    console.warn(`Erro ao salvar no localStorage para "${key}":`, error);
   }
 };
 
-const removeFromStorage = (key: string): void => {
-  if (!isClient) return;
+const safeRemoveItem = (key: string): void => {
+  if (!isClientSide()) return;
   try {
-    localStorage.removeItem(key);
+    window.localStorage.removeItem(key);
   } catch (error) {
-    console.warn(`Erro ao remover do localStorage para key "${key}":`, error);
+    console.warn(`Erro ao remover do localStorage para "${key}":`, error);
   }
 };
 
@@ -42,24 +41,21 @@ export function useAuth() {
   const queryClient = useQueryClient();
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Estado para controlar se já fizemos a inicialização no cliente
+  // 🔧 CORREÇÃO SSR: Só inicializar no cliente
   useEffect(() => {
-    if (isClient && !isInitialized) {
+    if (isClientSide()) {
       setIsInitialized(true);
     }
-  }, [isInitialized]);
+  }, []);
 
   const loginMutation = useMutation({
     mutationFn: authService.login,
     onSuccess: (data) => {
-      console.log('🔍 Login Success Data:', data); // Debug
+      console.log('🔍 Login Success Data:', data);
       
-      // 🔧 CORREÇÃO: Adaptar para estrutura real do backend
       const { user, token, tokens } = data;
-      
-      // Backend pode retornar 'token' OU 'tokens.accessToken'
       const accessToken = token || tokens?.accessToken;
-      const refreshToken = tokens?.refreshToken || token; // Fallback
+      const refreshToken = tokens?.refreshToken || token;
       
       if (!accessToken) {
         console.error('❌ Token não encontrado na resposta:', data);
@@ -67,10 +63,10 @@ export function useAuth() {
         return;
       }
       
-      // Salvar tokens no localStorage
-      setToStorage('partilio_token', accessToken);
+      // 🔧 CORREÇÃO SSR: Usar função segura para localStorage
+      safeSetItem('partilio_token', accessToken);
       if (refreshToken && refreshToken !== accessToken) {
-        setToStorage('partilio_refresh_token', refreshToken);
+        safeSetItem('partilio_refresh_token', refreshToken);
       }
       
       setAuth({
@@ -82,7 +78,7 @@ export function useAuth() {
       toast.success('Login realizado com sucesso!');
     },
     onError: (error: any) => {
-      console.error('❌ Login Error:', error); // Debug
+      console.error('❌ Login Error:', error);
       
       const errorMessage = error.response?.data?.message || 
                           error.message || 
@@ -95,15 +91,15 @@ export function useAuth() {
   const registerMutation = useMutation({
     mutationFn: authService.register,
     onSuccess: (data) => {
-      // Mesmo tratamento do login
       const { user, token, tokens } = data;
       const accessToken = token || tokens?.accessToken;
       const refreshToken = tokens?.refreshToken || token;
       
       if (accessToken) {
-        setToStorage('partilio_token', accessToken);
+        // 🔧 CORREÇÃO SSR: Usar função segura para localStorage
+        safeSetItem('partilio_token', accessToken);
         if (refreshToken && refreshToken !== accessToken) {
-          setToStorage('partilio_refresh_token', refreshToken);
+          safeSetItem('partilio_refresh_token', refreshToken);
         }
         
         setAuth({
@@ -123,38 +119,39 @@ export function useAuth() {
   const logoutMutation = useMutation({
     mutationFn: authService.logout,
     onSuccess: () => {
-      removeFromStorage('partilio_token');
-      removeFromStorage('partilio_refresh_token');
+      // 🔧 CORREÇÃO SSR: Usar função segura para localStorage
+      safeRemoveItem('partilio_token');
+      safeRemoveItem('partilio_refresh_token');
       setAuth(null);
       queryClient.clear();
       toast.success('Logout realizado com sucesso!');
     },
     onError: () => {
-      // Logout local mesmo se falhar no servidor
-      removeFromStorage('partilio_token');
-      removeFromStorage('partilio_refresh_token');
+      // 🔧 CORREÇÃO SSR: Logout local mesmo se falhar no servidor
+      safeRemoveItem('partilio_token');
+      safeRemoveItem('partilio_refresh_token');
       setAuth(null);
       queryClient.clear();
     },
   });
 
-  // Query para carregar dados do usuário apenas no cliente
+  // 🔧 CORREÇÃO SSR: Query só executa no cliente e após inicialização
   const { isLoading: isLoadingUser } = useQuery({
     queryKey: ['auth', 'profile'],
     queryFn: authService.getProfile,
-    enabled: isClient && isInitialized && !!getFromStorage('partilio_token') && !auth,
+    enabled: isClientSide() && isInitialized && !!safeGetItem('partilio_token') && !auth,
     retry: false,
     onSuccess: (user) => {
-      const token = getFromStorage('partilio_token');
-      const refreshToken = getFromStorage('partilio_refresh_token');
+      const token = safeGetItem('partilio_token');
+      const refreshToken = safeGetItem('partilio_refresh_token');
       
       if (token) {
         setAuth({ user, token, refreshToken: refreshToken || token });
       }
     },
     onError: () => {
-      removeFromStorage('partilio_token');
-      removeFromStorage('partilio_refresh_token');
+      safeRemoveItem('partilio_token');
+      safeRemoveItem('partilio_refresh_token');
     },
   });
 

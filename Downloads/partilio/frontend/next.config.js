@@ -11,9 +11,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  experimental: {
-    appDir: true,
-  },
+  // 🔧 CORREÇÃO: Remover experimental.appDir (não necessário no Next.js 14)
   async headers() {
     return [
       {
@@ -25,7 +23,6 @@ const nextConfig = {
       },
     ];
   },
-  // 🔧 CORREÇÃO: Configurar rewrite corretamente
   async rewrites() {
     return [
       {

@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAppStore } from '../../store';  // ← MUDANÇA: @/stores/authStore → ../../store
+import { useAppStore } from '../../store';
 import { RegisterForm } from './components/RegisterForm';
-import { Loader2, ArrowLeft, Shield, Users, ChartBar } from 'lucide-react';
+import { Loader2, ArrowLeft, Shield, Users, BarChart3 } from 'lucide-react';  // ← MUDANÇA: ChartBar → BarChart3
 
 const RegisterPage = () => {
   const router = useRouter();
-  const { auth } = useAppStore();  // ← MUDANÇA: usar auth do store geral
+  const { auth } = useAppStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const RegisterPage = () => {
             <div>
               <div className="flex items-center gap-3 mb-8">
                 <div className="h-10 w-10 bg-white/20 rounded-lg flex items-center justify-center">
-                  <ChartBar className="h-6 w-6" />
+                  <BarChart3 className="h-6 w-6" />  {/* ← MUDANÇA: ChartBar → BarChart3 */}
                 </div>
                 <h1 className="text-2xl font-bold">Partilio</h1>
               </div>
@@ -88,7 +88,7 @@ const RegisterPage = () => {
             <div className="lg:hidden text-center mb-8">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <div className="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <ChartBar className="h-6 w-6 text-white" />
+                  <BarChart3 className="h-6 w-6 text-white" />  {/* ← MUDANÇA: ChartBar → BarChart3 */}
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900">Partilio</h1>
               </div>
