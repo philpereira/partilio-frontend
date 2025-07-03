@@ -1,8 +1,8 @@
-// 🔐 ARQUIVO: src/app/login/page.tsx
+// 🔐 ARQUIVO CORRIGIDO: src/app/login/page.tsx
 
 'use client';
 
-import Link from 'next/link';  // ← ADICIONAR esta linha no topo
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useRouter } from 'next/navigation';
@@ -216,7 +216,7 @@ export default function LoginPage() {
               </p>
             </div>
 
-          {/* Link para registro */}
+            {/* Link para registro */}
             <div className="text-center">
               <p className="text-sm text-gray-600">
                 Não tem uma conta?{' '}
@@ -228,6 +228,8 @@ export default function LoginPage() {
                 </Link>
               </p>
             </div>
+          </div>
+        </div>
 
         {/* Lado direito - Hero/Features */}
         <div className="hidden lg:flex lg:flex-1 bg-gradient-to-br from-blue-600 to-purple-700 text-white">
@@ -297,4 +299,4 @@ export default function LoginPage() {
       </div>
     </div>
   );
-}
+}g
